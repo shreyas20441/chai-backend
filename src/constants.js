@@ -1,1 +1,2 @@
-console.log("Hello")
+
+export const DB_NAME = "videoTube"
