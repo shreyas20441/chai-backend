@@ -2,7 +2,7 @@
 import mongoose, {Schema} from "mongoose";
 
 import JWT from "jsonwebtoken";
-import bcrypt from  "bcrypt"
+import bcrypt from 'bcrypt';
 
 const UserSchema = new Schema({
 
@@ -62,9 +62,11 @@ const UserSchema = new Schema({
 
 UserSchema.pre("save", async function(next){
 
-    if(!this.isModified("Password")) return next() //if not modified the password then retun next()
-        
-    this.password = bcrypt.hash(this.password, 10)//else move to the next
+    if(!this.isModified("password")) return next();
+     //if not modified the password then retun next()
+       
+    this.password = await bcrypt.hash(this.password, 10);
+    // this.password = await bcrypt.hash(this.password, 10);//else 
     next();
 })
 
@@ -75,11 +77,11 @@ UserSchema.methods.isPasswordCorrect = async function(password){
 };
 
 UserSchema.methods.generateAccessToken =  function() {
-   retun JWT.sign({
-        _id = this._id,
-        email = this.email,
-        username=this.username,
-        fullName= this.fullName
+   return JWT.sign({
+        _id : this._id,
+        email : this.email,
+        username:this.username,
+        fullName: this.fullName
 
     },
     process.env.ACCESS_TOKEN_SECRET,
@@ -91,8 +93,8 @@ UserSchema.methods.generateAccessToken =  function() {
 
 UserSchema.methods.generateRefreshToken =  function() {
 
-    retun JWT.sign({
-        _id = this._id,
+    return JWT.sign({
+        _id : this._id,
       
 
     },
